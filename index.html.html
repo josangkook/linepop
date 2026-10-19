@@ -1,0 +1,382 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#11172b"><title>라인팝 7×10 · 대전 연습 V12</title><style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,'Malgun Gothic',sans-serif}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#2b3764,#101426 75%);color:#f7f8ff;min-height:100dvh;display:flex;justify-content:center}.app{width:min(100%,510px);padding:12px 14px 24px;text-align:center}h1{font-size:25px;margin:3px 0 5px}.subtitle{font-size:13px;color:#adbcdf;margin:0 0 13px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#242e52;border:1px solid #43537a;border-radius:13px;padding:8px 3px}.stat small{color:#acb9dd;display:block;font-size:12px}.stat b{font-size:24px;font-variant-numeric:tabular-nums}.urgent b{color:#ff6c84}.progress{height:11px;border-radius:15px;background:#394467;overflow:hidden;margin:12px 0 5px}.fill{height:100%;background:linear-gradient(90deg,#68e7b0,#ffed86);transition:width .18s}.target{font-size:13px;color:#c6d3f0;margin:7px 0 11px}.board-frame{padding:6px;background:#4b5b88;border-radius:18px;box-shadow:0 16px 45px #0008}.board{width:100%;aspect-ratio:7 / 10;position:relative;overflow:hidden;touch-action:none;user-select:none;background-color:#10182d;background-image:linear-gradient(#ffffff0a 1px,transparent 1px),linear-gradient(90deg,#ffffff0a 1px,transparent 1px);background-size:14.285714% 10%;border-radius:11px}.tile{width:14.285714%;height:10%;position:absolute;left:0;top:0;display:grid;place-items:center;will-change:transform,opacity;pointer-events:auto}.gem{width:86%;height:86%;border-radius:28%;box-shadow:inset -4px -6px 0 #0003,inset 4px 5px 0 #fff7,0 3px 5px #0005;position:relative}.gem:after{content:'';position:absolute;top:13%;left:18%;width:29%;height:17%;border-radius:100%;transform:rotate(-35deg);background:#fff9}.g0{background:#ff617e}.g1{background:#ffbd43}.g2{background:#56d7f6}.g3{background:#9f8bff}.g4{background:#5fe3a1}.g5{background:#ff8cd3}.g6{background:#f7a16b}.g7{background:#dae873}.tile.burst{animation:burst .16s ease-in forwards;z-index:5}@keyframes burst{0%{opacity:1;filter:brightness(1);scale:1}38%{opacity:1;filter:brightness(2.5);scale:1.26}100%{opacity:0;filter:brightness(2);scale:.05}}.particle{position:absolute;width:7px;height:7px;border-radius:3px;pointer-events:none;z-index:8;animation:particle .29s ease-out forwards}@keyframes particle{to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.15)}}.float{position:absolute;left:50%;top:40%;transform:translate(-50%,0);font-size:22px;font-weight:950;color:#fff3a5;pointer-events:none;z-index:20;text-shadow:0 3px 9px #000,0 0 12px #ff9f00;white-space:nowrap;animation:float .55s ease-out forwards}@keyframes float{0%{opacity:0;transform:translate(-50%,10px) scale(.65)}25%{opacity:1;transform:translate(-50%,-10px) scale(1.16)}100%{opacity:0;transform:translate(-50%,-54px) scale(1)}}.float.combo{color:#ffb8f8;font-size:26px}.helper{font-size:13px;color:#cddaf8;line-height:1.6;padding:12px 5px}.buttons{display:flex;gap:9px;justify-content:center}button{font:inherit;font-weight:800;color:#14203a;background:#abf1d3;border:0;border-radius:12px;padding:11px 17px;cursor:pointer}.secondary{background:#d3dbf4}.note{color:#91a2cc;font-size:12px;margin-top:12px}.overlay{position:fixed;inset:0;background:#080d20d9;display:flex;align-items:center;justify-content:center;padding:22px;z-index:30}.dialog{width:min(100%,380px);background:#242e51;border:1px solid #5b6a93;border-radius:22px;padding:25px;box-shadow:0 25px 70px #0009}.dialog h2{font-size:26px;margin:0 0 8px}.dialog p{line-height:1.7;color:#d3def8;white-space:pre-line}.dialog button{margin-top:10px;width:100%}.hidden{display:none!important}
+
+.tile.locked .gem{outline:2px solid #ffefad;outline-offset:-3px}.chain{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);font-size:clamp(15px,5vw,26px);text-shadow:0 2px 5px #000,0 0 7px #000;pointer-events:none}.tile.locked .gem{filter:saturate(.75)}.tile.invalid .gem{animation:shake .25s linear 2}@keyframes shake{0%,100%{translate:0}25%{translate:-5px}75%{translate:5px}}.float.warning{color:#ffb8b8;font-size:18px}.tile{touch-action:none}
+
+.chainLink{position:absolute;z-index:6;left:50%;top:50%;display:flex;align-items:center;justify-content:space-evenly;pointer-events:none;filter:drop-shadow(0 1px 2px #141922)}.chainLink.h{height:15%;width:58%;flex-direction:row}.chainLink.v{width:15%;height:58%;flex-direction:column}.chainLink.right{transform:translate(0,-50%)}.chainLink.left{transform:translate(-100%,-50%)}.chainLink.down{transform:translate(-50%,0)}.chainLink.up{transform:translate(-50%,-100%)}.chainLink i{border:2px solid #f4f7ff;background:#66758e;border-radius:100%;box-shadow:0 0 2px #fff,0 1px 2px #111}.chainLink.h i{width:40%;height:95%;margin-left:-13%;transform:rotate(-35deg)}.chainLink.v i{height:40%;width:95%;margin-top:-13%;transform:rotate(35deg)}.chainPin{position:absolute;z-index:7;font-size:14px;color:#f6faff;text-shadow:0 0 3px #1a233c}.power{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(16px,5vw,31px);font-weight:1000;color:#fff;text-shadow:0 2px 3px #10223d,0 0 7px #07112b;z-index:4}.power.row,.power.col{border:3px solid #fff8b0;border-radius:25%;box-shadow:0 0 12px #ffde6f,inset 0 0 10px #ffdc77}.power.bomb{filter:drop-shadow(0 0 6px #fff)}.gem:has(.power){animation:glow 1.3s ease-in-out infinite alternate}@keyframes glow{to{filter:brightness(1.45)}}
+.chainBridge{position:absolute;z-index:9;pointer-events:none;transform:translate(-50%,-50%);font-size:clamp(25px,8vw,46px);line-height:1;color:#ecf7ff;text-shadow:1px 2px 2px #122034,0 0 6px #f3e9ad;filter:drop-shadow(0 1px 2px #141922)}.chainBridge.clank{animation:chainClank .55s cubic-bezier(.2,1.5,.3,1)}@keyframes chainClank{0%{opacity:0;scale:2.8;filter:brightness(3)}55%{opacity:1;scale:.85}75%{scale:1.15}100%{scale:1}}.chainBridge.v{transform:translate(-50%,-50%) rotate(90deg)}.power.color{inset:10%;border:0;border-radius:23%;background:transparent;box-shadow:inset 0 0 0 3px #fff,0 0 7px #fff;animation:none;font-size:clamp(22px,5.8vw,36px);color:#fff;text-shadow:0 2px 4px #12152a,0 0 3px #000}
+.gem:has(.power.color){outline:3px solid #fff9be;outline-offset:-2px}
+.gem:has(.power.color)::before{content:"";position:absolute;inset:-1px;border:3px solid transparent;border-radius:28%;background:conic-gradient(#ff507c,#ffe26a,#6de7a3,#65bfff,#b191ff,#ff507c) border-box;mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);mask-composite:exclude;pointer-events:none;z-index:4}.charged{animation:boardCharge .42s ease-out}.blastFX{position:absolute;inset:0;z-index:15;pointer-events:none;border:7px solid #fff8b1;border-radius:13px;box-shadow:inset 0 0 45px #fff7,0 0 30px #ffe46e;animation:blast .5s ease-out forwards}@keyframes blast{to{opacity:0;scale:1.12}}@keyframes boardCharge{30%{filter:brightness(1.7) saturate(1.4)}100%{filter:none}}@keyframes rainbow{to{filter:hue-rotate(360deg)}}.laserBeam{position:absolute;z-index:14;pointer-events:none;opacity:0;border-radius:999px;background:linear-gradient(90deg,#fff6b7,#fff,#84efff,#fff);box-shadow:0 0 10px #fff,0 0 18px #70d7ff,0 0 26px #ffe57a;animation:beamFlash .38s ease-out forwards}.laserBeam.h{height:10px;transform:translateY(-50%)}.laserBeam.v{width:10px;background:linear-gradient(180deg,#fff6b7,#fff,#84efff,#fff);transform:translateX(-50%)}@keyframes beamFlash{0%{opacity:0;filter:brightness(1.6)}18%{opacity:1}100%{opacity:0;filter:brightness(2.1)}}
+.tile.iced .gem{outline:3px solid #caf7ff;outline-offset:-2px;box-shadow:inset 0 0 18px #bceeff,0 0 12px #9be6ff}.iceCrust{position:absolute;z-index:8;inset:0;display:grid;place-items:center;font-size:clamp(18px,5vw,30px);color:#fff;text-shadow:0 1px 5px #338bcb;pointer-events:none}.iceCrust small{position:absolute;right:4px;bottom:0;font-size:12px;background:#2175ad;border-radius:8px;padding:1px 3px}.tile.iced .gem:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#baf4ff99,transparent 60%,#e5fbff77);border-radius:28%;z-index:6;pointer-events:none}
+.timeTrack{height:22px;background:#131b32;border:2px solid #56678d;border-radius:20px;overflow:hidden;margin:9px 0 5px;position:relative}.timeBar{height:100%;width:100%;background:linear-gradient(90deg,#35cfa2,#b7f96c);transition:width .12s linear,background .2s;box-shadow:0 0 14px #67eea788}.timeBar.low{background:linear-gradient(90deg,#eb3a60,#ff984f);animation:alarm .48s ease-in-out infinite alternate}@keyframes alarm{to{filter:brightness(1.65)}}.timeTrack b{position:absolute;inset:0;display:grid;place-items:center;text-shadow:0 1px 4px #121527;font-size:13px}.boosterRow{display:flex;gap:8px;align-items:stretch;justify-content:center;margin:9px 0}.boosterRow button{font-size:13px;flex:1;padding:10px 5px}.boosterRow .inventory{background:#ffd982}.boosterRow .ad{background:#a3d9ff}.boosterRow .shop{background:#ebc0ff}.pauseCurtain{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;overflow:hidden}.pauseCurtain.open{display:flex}.pauseCurtain .drape{position:absolute;top:0;bottom:0;width:50%;background:repeating-linear-gradient(90deg,#511c47 0%,#872957 12%,#421936 24%,#792248 34%);box-shadow:inset -12px 0 25px #240a22,0 0 20px #000a}.pauseCurtain .drape.left{left:0;animation:curtainLeft .48s ease-out both}.pauseCurtain .drape.right{right:0;animation:curtainRight .48s ease-out both}@keyframes curtainLeft{from{transform:translateX(-105%)}to{transform:translateX(0)}}@keyframes curtainRight{from{transform:translateX(105%)}to{transform:translateX(0)}}.pauseCurtain .pauseContent{position:relative;z-index:2;text-align:center;border:2px solid #f8c5d3;border-radius:22px;background:#300d2de8;padding:25px;animation:fadein .55s ease both;box-shadow:0 10px 30px #0009}.pauseContent h2{font-size:28px}.pauseContent button{width:100%;margin:7px 0}.pauseCurtain .rail{position:absolute;top:0;height:11px;left:0;right:0;background:linear-gradient(90deg,#a9864a,#ffe2a1,#a9864a);z-index:4}@keyframes fadein{from{opacity:0}to{opacity:1}}.toast{position:fixed;top:12%;left:50%;transform:translateX(-50%);background:#193b3d;border:2px solid #88ffdf;padding:11px 18px;border-radius:16px;z-index:100;color:white;font-size:18px;font-weight:900;pointer-events:none;animation:fadein .25s}.shopModal{z-index:80}.dialog .muted{font-size:12px;color:#aabcdd}.dialog .purchase{background:#ffd88a}
+
+.energyPanel{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0;padding:11px 13px;border:1px solid #967ad3;border-radius:13px;background:#292044}.energyPanel b{font-size:14px}.energyPanel span{font-size:12px;color:#e8d4ff}.battleMenu{margin:10px 0;padding:12px;border:1px solid #687ab0;border-radius:16px;background:#1b294b}.battleMenu button{margin:4px;padding:9px}.battleMenu .chosen{background:#ffdf87}.battleHUD{display:none;margin:8px 0;padding:12px;border-radius:13px;background:#263355}.battleHUD.on{display:block}.battleTrack{height:17px;border-radius:16px;overflow:hidden;background:#111b36;margin:5px 0 10px}.battleGauge{height:100%;background:linear-gradient(90deg,#ff526f,#ffc565);transition:width .12s linear}.matchClock{font-weight:900;font-size:24px;color:#ffdc7a}.battleOverlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:#081025ec;z-index:110}.battleOverlay.on{display:flex}.battleCard{width:min(95%,400px);background:#25375b;border-radius:22px;text-align:center;padding:28px;border:2px solid #8896c1}.battleCard h2{font-size:38px}.battleCard button{width:100%;margin:5px 0}.battleNote{font-size:12px;color:#d3dcf4;line-height:1.5}
+
+.board-frame{position:relative;isolation:isolate}.board-frame:after{content:"";position:absolute;inset:-3px;border:7px solid transparent;border-radius:20px;pointer-events:none;z-index:22;opacity:0}.emergency .board-frame:after{border-color:#ff304f;box-shadow:0 0 10px #ff304f,0 0 22px #ff304f, inset 0 0 11px #f43c55;animation:urgentPulse .42s ease-in-out infinite alternate}@keyframes urgentPulse{from{opacity:.23}to{opacity:1}}
+.soundRow{display:flex;justify-content:center;gap:8px;margin:8px 0}.soundRow button{font-size:13px;padding:8px 12px}.rankPanel{background:#202d4d;border:1px solid #61749c;border-radius:14px;padding:12px;margin:10px 0;text-align:left}.rankPanel h3{font-size:15px;margin:0 0 8px}.rankGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.rankGrid>div{background:#324366;border-radius:9px;padding:7px 4px;text-align:center}.rankGrid small{display:block;color:#cedbf7}.rankGrid b{font-size:17px}.rankPanel p{font-size:12px;line-height:1.5;color:#c5d4ee;margin-bottom:0}
+.tile.matchPreview .gem{animation:matchPulse .33s ease-in-out infinite alternate;outline:3px solid #ffffff;outline-offset:-1px;box-shadow:0 0 12px #fff,0 0 22px #ffe66a,inset 0 0 12px #fff8;filter:brightness(1.45)}
+@keyframes matchPulse{from{filter:brightness(1.2);scale:1}to{filter:brightness(1.9);scale:1.12}}
+
+.hintRow .gem{outline:3px solid #f7e96f;outline-offset:-2px;animation:hintBreathe .55s ease-in-out infinite alternate;box-shadow:0 0 12px #ffe56b,inset 0 0 8px #fff9}
+@keyframes hintBreathe{from{filter:brightness(1);transform:scale(1)}to{filter:brightness(1.7);transform:scale(1.1)}}
+.hintGoal{position:absolute;z-index:19;pointer-events:none;border:4px dashed #faffab;border-radius:13px;box-shadow:0 0 15px #f3fc67,inset 0 0 14px #fff8;animation:hintBreathe .55s ease-in-out infinite alternate}
+.hintArrow{position:absolute;z-index:21;pointer-events:none;display:grid;place-items:center;font-size:clamp(26px,9vw,43px);font-weight:1000;color:#fff8a0;text-shadow:0 0 5px #171826,0 0 14px #ffda25;animation:hintArrowMove .7s ease-in-out infinite alternate}
+@keyframes hintArrowMove{from{transform:translate(-50%,-50%) scale(.95);opacity:.65}to{transform:translate(-50%,-50%) scale(1.3);opacity:1}}
+
+.hintSource .gem{animation:hintSourcePulse .44s ease-in-out infinite alternate!important;outline:4px solid #fff5a0!important;outline-offset:-2px;box-shadow:0 0 17px #fff,0 0 28px #f9e04a,inset 0 0 12px #fff!important;position:relative;z-index:20}
+@keyframes hintSourcePulse{from{filter:brightness(1.25);transform:scale(1.02)}to{filter:brightness(2.2);transform:scale(1.22)}}
+.hintMatchTarget .gem{animation:hintTargetPulse .52s ease-in-out infinite alternate!important;outline:3px solid #a7fbff!important;box-shadow:0 0 14px #6cf5ff,0 0 22px #fff!important}
+@keyframes hintTargetPulse{from{filter:brightness(1.1);transform:scale(1)}to{filter:brightness(1.9);transform:scale(1.13)}}
+.hintGhost{position:absolute;z-index:18;pointer-events:none;display:grid;place-items:center;border:3px dashed #f8ff9c;border-radius:12px;background:#fff4;box-shadow:0 0 17px #fff8;animation:hintTargetPulse .52s ease-in-out infinite alternate}
+.hintGhost::after{content:'✦';font-size:24px;color:#fff;filter:drop-shadow(0 0 5px #f7dc39)}
+
+.battleItems{display:none;gap:8px;margin:8px 0 12px}.battleItems.on{display:flex}.battleItems button{flex:1;min-width:0;padding:11px 5px;font-size:13px;background:#ffe0a0}.battleItems button:disabled{opacity:.4;filter:grayscale(.9)}
+.chainShatter{position:absolute;z-index:25;pointer-events:none;font-size:30px;animation:chainShatter .7s ease-out forwards}@keyframes chainShatter{0%{opacity:1;transform:translate(-50%,-50%) scale(.85);filter:brightness(2)}50%{opacity:1;transform:translate(-50%,-75%) scale(1.8) rotate(18deg)}100%{opacity:0;transform:translate(-50%,-125%) scale(.15) rotate(60deg)}}
+
+/* V30 responsive touch feel */
+.tile.matchPreview .gem{outline:3px solid #fff4ad;outline-offset:-2px;animation:v26Pulse .27s ease-in-out infinite alternate;box-shadow:0 0 13px #fff,0 0 20px #ffe66b,inset 0 0 9px #fff8}
+@keyframes v26Pulse{to{filter:brightness(1.9);scale:1.13}}
+.touchSettings{display:flex;gap:8px;justify-content:center;margin:7px 0 11px}.touchSettings button{font-size:12px;padding:8px 12px;background:#c5d8ff}
+
+.invitePanel{margin:12px 0;padding:14px;border:1px solid #63bed7;border-radius:16px;background:linear-gradient(125deg,#233c60,#1c2746);text-align:left}.invitePanel h3{margin:0 0 8px;font-size:17px}.invitePanel p{font-size:12px;line-height:1.5;color:#d8e7ff}.inviteCode{padding:9px;border-radius:9px;background:#121d37;color:#fff1a4;font-weight:900;text-align:center;letter-spacing:2px}.inviteActions{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}.inviteActions button{flex:1;font-size:13px;padding:10px}.inviteStatus{font-size:12px;color:#bee9df;min-height:18px;line-height:1.5;margin-top:8px}
+</style><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="라인팝"><style>html,body{overscroll-behavior:none}body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}button{-webkit-tap-highlight-color:transparent} .app{max-width:100vw}</style></head><body><main class="app"><h1>💎 라인팝 7×10</h1><p class="subtitle">3개 이상 맞춰야 이동 성공! 16레벨부터! 매치가 지연되면 체인이 철컥 등장!</p><div class="energyPanel"><b>⚡ 플레이 에너지 <span id="energyCount">10 / 10</span></b><span id="energyETA">충전 완료</span><div style="font-size:12px;margin-top:5px">🎒 보관함: 에너지 충전권 <b id="energyTickets">0/100</b> · 시간 연장 <b id="timeTickets">0/100</b> · 체인 제거 <b id="chainTickets">0/100</b></div><button id="useEnergyTicket" class="secondary" style="margin-top:6px;font-size:12px">⚡ 에너지 충전권 사용 (+1)</button></div><section class="energySets" style="padding:10px;margin:10px 0;border:1px solid #56678d;border-radius:14px;background:#1d2946"><h3 style="margin:3px 0 7px">💎 에너지 세트 보관함</h3><div id="packList" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px"></div><p style="font-size:12px;color:#cad9f5">세트 개봉 시 에너지가 즉시 누적되며 10개를 초과할 수 있어요. 아래의 지급 버튼은 테스트 전용입니다.</p></section><section class="stats"><div class="stat"><small>단계</small><b id="level">1</b></div><div class="stat"><small>점수</small><b id="score">0</b></div><div class="stat" id="timerBox"><small>남은 시간</small><b id="timer">20.0s</b></div></section><div class="battleMenu" id="battleMenu"><b>⚔️ 대전 연습 모드</b><div><button id="soloMode" class="chosen">일반 게임</button><button id="friendMode">친구 초대</button><button id="randomMode">랜덤 대전</button></div><p class="battleNote" id="modeText">일반 모드는 첫 입장 시에만 에너지 1개(게임 오버까지 무료 레벨 진행), 대전은 경기마다 1개 사용 · 대전 상대는 현재 모의 상대입니다. 실제 온라인 연결·초대 코드는 서버 구축 후 가능합니다.</p></div><div class="battleHUD" id="battleHUD"><div style="display:flex;justify-content:space-between"><b>상대 생존 시간</b><span id="opponentSeconds">20.0초</span></div><div class="battleTrack"><div class="battleGauge" id="opponentGauge" style="width:100%"></div></div><div class="matchClock" id="matchClock">경기 종료까지 90초</div><div class="battleNote">상대 게임판 및 점수는 표시하지 않습니다 · 특수 아이템·연쇄 허용 · 시간 경과 시 체인·얼음 등장 · 보유 아이템 각 1회 사용 가능 · 경기 중 구매/광고 불가</div></div><div class="battleItems" id="battleItems"><button id="battleTime">⏱ +5초 (1회)</button><button id="battleClear">⛓️ 전체 체인 제거 (1회)</button></div><div class="timeTrack"><div class="timeBar" id="timeBar"></div><b id="timeLabel">⏳ 20.0초</b></div><div class="progress"><div class="fill" id="fill"></div></div><p class="target" id="target"></p><div class="board-frame"><div class="board" id="board" aria-label="7 곱하기 10 게임판"></div></div><div class="helper">손가락을 밀면 <b>가로줄 또는 세로줄 전체가 실시간 이동</b>해요.<br>3개 기본 · 4개 줄 제거 · 5개 같은 색 전체 · 교차 폭탄!<br>아이템 동시 발동=합체 폭발 · 5연쇄=+3초 · 25레벨부터 얼음 2회 제거<br>16레벨부터 4초간 매치가 없으면 이동 힌트가 표시되고, 이후 체인이 등장합니다.</div><div class="boosterRow" id="booster"><button class="inventory" id="useBoost">⏱ +5초 사용 (<span id="stock">0</span>)</button><button class="ad" id="watchAd">📺 광고 보상</button><button class="shop" id="shopBtn">🛒 상점</button></div><div class="chainSupply"><button class="secondary" id="testChain">⛓️ 체인 제거권 테스트 지급 (보유 <span id="chainStockLabel">1</span>/100)</button></div><div class="touchSettings"><button id="hapticBtn">📳 진동 켜짐</button><button id="inertiaBtn">🌀 관성 이동 켜짐</button></div><div class="soundRow"><button class="secondary" id="musicBtn">🎵 음악 켜기</button><button class="secondary" id="fxBtn">🔊 효과음 켜짐</button></div><section class="invitePanel" id="invitePanel"><h3>🎁 친구 초대 · 추천 보상</h3><p>카카오톡·페이스북·메신저 등으로 초대 링크를 보내세요. 친구가 앱을 설치하고 첫 실행을 완료하면 보상이 지급되는 방식으로 준비하고 있어요.</p><div class="inviteCode" id="inviteCode">초대 코드 준비 중</div><div class="inviteActions"><button id="shareInvite">📤 친구에게 공유</button><button id="copyInvite" class="secondary">🔗 링크 복사</button></div><p>출시 보상안: 초대한 사람과 초대받은 사람 동일: ⚡ 루비 에너지 세트(10개) + ⏱ 시간 연장권 5장 (보관함 각 최대 100장 · 실제 지급은 설치/추천 서버 인증 필요)</p><div class="inviteStatus" id="inviteStatus">※ 현재 HTML 테스트판에서는 추천 보상 지급을 하지 않습니다. 실제 앱 출시 후 서버에서 승인하면 양쪽 동일 보상을 보관함에 지급합니다.</div></section><section class="rankPanel"><h3>🏆 내 기록 · 기간별 등급 보상</h3><div class="rankGrid"><div><small>오늘</small><b id="rankDaily">0점</b></div><div><small>이번 주</small><b id="rankWeekly">0점</b></div><div><small>이번 달</small><b id="rankMonthly">0점</b></div></div><p id="rankReward">개인 최고 기록으로 등급 달성 시 보상 지급 · 기기에만 저장되는 연습 랭킹</p></section><section class="rankPanel"><h3>⚔️ 대전 승리 횟수 · 개인 기록</h3><div class="rankGrid"><div><small>오늘 승리</small><b id="battleDaily">0승</b></div><div><small>이번 주 승리</small><b id="battleWeekly">0승</b></div><div><small>이번 달 승리</small><b id="battleMonthly">0승</b></div></div><p id="battleRankReward">승리 횟수로 등급 평가 · 현재는 가상 상대 연습 기록</p></section><div class="buttons"><button id="pauseBtn" class="secondary">⏸ 일시정지</button><button id="restartBtn">↻ 처음부터</button></div><p class="note">대전 연습 V30 · 레이저 연출 / 얼음 / 조합 폭발 / 기록 저장</p></main><div class="pauseCurtain" id="pauseCurtain"><div class="drape left"></div><div class="drape right"></div><div class="rail"></div><div class="pauseContent"><h2>🎭 잠깐 쉬는 중</h2><p>화면과 시간 모두 멈췄어요.</p><button id="resumeBtn">▶ 계속 플레이</button><button class="secondary" id="pauseMenu">↻ 처음부터</button></div></div><div class="overlay hidden shopModal" id="shopModal"><div class="dialog"><h2 id="shopTitle">⏱ 시간 충전소</h2><p id="shopText">시간 연장권은 사용할 때 5초가 추가됩니다.</p><button id="shopAction" class="purchase">테스트 구매 +1개 (실제 결제 없음)</button><button id="shopClose" class="secondary">닫기</button><p class="muted">※ 광고 및 구매는 데모입니다. 실제 출시 시 광고 SDK와 스토어 결제를 연결해야 합니다.</p></div></div><div class="battleOverlay" id="battleResult"><div class="battleCard"><h2 id="battleResultTitle">🏆 승리!</h2><p id="battleResultText"></p><button id="rematchBtn">⚔️ 재대결</button><button id="leaveBattleBtn" class="secondary">일반 모드로 돌아가기</button></div></div><div class="overlay" id="overlay"><div class="dialog"><h2 id="dialogTitle">💎 라인팝 7×10</h2><p id="dialogText">20초에서 시작! 블록을 깨서 시간을 충전하세요!\n줄을 끌면 블록들이 함께 움직입니다.\n3개 이상 맞지 않으면 원위치로 돌아갑니다.\n4개는 줄 제거, 5개는 같은 색 전체 제거, 교차는 폭탄!</p><button id="actionBtn">게임 시작</button></div></div><script>
+(()=>{'use strict';
+const C=7,R=10, $=id=>document.getElementById(id), boardEl=$('board'), overlay=$('overlay');
+const sleep=ms=>new Promise(ok=>setTimeout(ok,ms)), rand=n=>Math.floor(Math.random()*n);
+// Original, offline synthesised soundtrack: no music files or network required.
+let audioCtx=null,musicOn=false,fxOn=true,musicLoop=null,musicStep=0;
+let hapticOn=true,inertiaOn=true;
+function vibrate(pattern){if(!hapticOn||!navigator.vibrate)return;try{navigator.vibrate(pattern)}catch(_){}}
+$('hapticBtn').onclick=()=>{hapticOn=!hapticOn;$('hapticBtn').textContent=hapticOn?'📳 진동 켜짐':'📳 진동 꺼짐';if(hapticOn)vibrate(30)};
+$('inertiaBtn').onclick=()=>{inertiaOn=!inertiaOn;$('inertiaBtn').textContent=inertiaOn?'🌀 관성 이동 켜짐':'🌀 관성 이동 꺼짐'};
+const melody=[76,79,83,79,74,79,81,79,72,76,79,76,74,77,81,77];
+const bass=[48,48,43,43,45,45,43,43];
+function soundReady(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return true}catch(_){return false}}
+function tone(note,duration=.13,type='triangle',volume=.055,when=0){if(!audioCtx)return;const t=audioCtx.currentTime+when,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.setValueAtTime(440*Math.pow(2,(note-69)/12),t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.00011,volume),t+.014);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g).connect(audioCtx.destination);o.start(t);o.stop(t+duration+.02)}
+function sfx(kind='pop'){if(kind==='pop')vibrate(16);if(kind==='laser')vibrate([24,22,32]);if(kind==='bomb')vibrate([45,25,55]);if(kind==='ice')vibrate([20,18,20]);if(kind==='chain')vibrate(50);if(!fxOn||!soundReady())return;const map={pop:[[88,.08,'sine',.09],[76,.12,'triangle',.045]],laser:[[92,.18,'sawtooth',.042],[104,.12,'sine',.07]],bomb:[[47,.21,'sawtooth',.08],[31,.34,'triangle',.07]],chain:[[63,.085,'square',.045],[52,.13,'triangle',.04]],ice:[[92,.11,'sine',.06],[99,.17,'sine',.06]],win:[[76,.13,'triangle',.07],[81,.18,'triangle',.07],[88,.33,'triangle',.09]],lose:[[62,.22,'triangle',.06],[57,.38,'triangle',.055]]};(map[kind]||map.pop).forEach((x,i)=>tone(...x,i*.065))}
+function musicTick(){if(!musicOn||!active||phase==='paused'||shopOpen)return;if(!soundReady())return;const emergency=remaining<=5;const i=musicStep++;tone(melody[i%16]+(emergency&&i%4===0?12:0),emergency?.09:.14,'triangle',emergency?.052:.042);if(i%4===0)tone(bass[Math.floor(i/4)%8],.23,'sine',.062);if(i%2===0)tone(38,.055,'square',.016)}
+function startMusic(){if(musicLoop)clearInterval(musicLoop);if(musicOn){soundReady();musicLoop=setInterval(musicTick,remaining<=5?105:185)}}
+function syncMusicSpeed(){if(musicOn)startMusic()}
+$('musicBtn').onclick=()=>{musicOn=!musicOn;const ok=soundReady();$('musicBtn').textContent=musicOn&&ok?'🎵 음악 끄기':'🎵 음악 켜기';musicOn=musicOn&&ok;startMusic()};
+$('fxBtn').onclick=()=>{fxOn=!fxOn;if(fxOn)soundReady();$('fxBtn').textContent=fxOn?'🔊 효과음 켜짐':'🔇 효과음 꺼짐'};
+let priorDanger=false;
+function dangerUI(){const now=active&&remaining<=5;document.body.classList.toggle('emergency',now);if(now!==priorDanger){priorDanger=now;syncMusicSpeed();if(now)sfx('chain')}}
+// Local personal bests; network-wide standings require an online service.
+let history=[];try{history=JSON.parse(localStorage.getItem('linepop_v18_history')||'[]');if(!Array.isArray(history))history=[]}catch(_){history=[]}
+let rewards={};try{rewards=JSON.parse(localStorage.getItem('linepop_v18_rewards')||'{}')||{}}catch(_){rewards={}}
+const pad=n=>String(n).padStart(2,'0');
+function periodKeys(date=new Date()){const d=new Date(date);const daily=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());const wd=new Date(d);wd.setDate(wd.getDate()-(wd.getDay()+6)%7);const weekly=wd.getFullYear()+'-W'+pad(Math.ceil(((wd-new Date(wd.getFullYear(),0,1))/86400000+new Date(wd.getFullYear(),0,1).getDay()+6)%7/7));const monthly=d.getFullYear()+'-'+pad(d.getMonth()+1);return {daily,weekly:wd.getFullYear()+'-'+pad(wd.getMonth()+1)+'-'+pad(wd.getDate()),monthly}}
+function recordRank(points){if(points<=0)return;history.push({...periodKeys(),points,at:Date.now(),mode:battleMode});history=history.slice(-600);try{localStorage.setItem('linepop_v18_history',JSON.stringify(history))}catch(_){}refreshRanks()}
+function refreshRanks(){const keys=periodKeys();for(const [field,id] of [['daily','rankDaily'],['weekly','rankWeekly'],['monthly','rankMonthly']]){const best=Math.max(0,...history.filter(e=>e[field]===keys[field]).map(e=>e.points));$(id).textContent=best.toLocaleString()+'점';const threshold=field==='daily'?500:field==='weekly'?1500:3000;const tier=best>=threshold*3?'골드':best>=threshold*2?'실버':best>=threshold?'브론즈':'도전 중';const rewardKey=field+':'+keys[field]+':'+tier;if(tier!=='도전 중'&&!rewards[rewardKey]&&stock<100){rewards[rewardKey]=true;stock++;persistStock();notify('🏅 '+field+' '+tier+'! +5초 연장권 1개');}if(field==='daily')$('rankReward').textContent='개인 기록 등급: '+tier+' · 일간 500/1000/1500, 주간 1500/3000/4500, 월간 3000/6000/9000점 · 각 등급 도달 보상 1개(최대 100개)';}try{localStorage.setItem('linepop_v18_rewards',JSON.stringify(rewards))}catch(_){}if(typeof inventory==='function')inventory()}
+
+let battleStreak=0;try{battleStreak=Number(localStorage.getItem('linepop_v26_streak')||0)||0}catch(_){}
+let battleWins=[];try{battleWins=JSON.parse(localStorage.getItem('linepop_v19_battlewins')||'[]');if(!Array.isArray(battleWins))battleWins=[]}catch(_){battleWins=[]}
+function refreshBattleRanks(){const keys=periodKeys();let tier='도전자';for(const [field,id] of [['daily','battleDaily'],['weekly','battleWeekly'],['monthly','battleMonthly']]){const wins=battleWins.filter(w=>w[field]===keys[field]).length;$(id).textContent=wins+'승';if(field==='monthly')tier=wins>=30?'다이아':wins>=15?'골드':wins>=5?'실버':wins>=1?'브론즈':'도전자'}$('battleRankReward').textContent='이번 달 '+tier+' · 브론즈 1승 / 실버 5승 / 골드 15승 / 다이아 30승 · 기기 내 연습 기록 (온라인 순위 아님)'}
+function recordBattleVictory(){battleStreak++;try{localStorage.setItem('linepop_v26_streak',String(battleStreak))}catch(_){}battleWins.push({...periodKeys(),at:Date.now()});battleWins=battleWins.slice(-2000);try{localStorage.setItem('linepop_v19_battlewins',JSON.stringify(battleWins))}catch(_){}refreshBattleRanks()}
+let battleTimeUsed=false,battleChainUsed=false;let battleMode='solo',battleStarted=0,battleEnds=0,opponentRemaining=20,opponentLast=0,opponentRoll=0,battleRng=12345,battleChainStage=0,battleIceStage=0,battleTickAt=0;
+const battleRand=()=>((battleRng=(1664525*battleRng+1013904223)>>>0)/4294967296);
+let board=[], level=1, score=0, levelStart=0, target=180, remaining=20, colors=4, timer=null, deadline=0, active=false, busy=false, phase='intro', pointer=null, epoch=0, uid=0, lastMatchAt=Date.now(), lastChainAt=0;
+const unitX=()=>boardEl.clientWidth/C,unitY=()=>boardEl.clientHeight/R, gem=()=>({v:rand(colors),id:++uid,chain:null,special:null,ice:0});
+const ENERGY_KEY='linepop_energy_v17',ENERGY_MAX=10,ENERGY_INTERVAL=20*60*1000;
+let energy=10,energyAt=Date.now();
+try{const saved=JSON.parse(localStorage.getItem(ENERGY_KEY)||'null');if(saved&&Number.isFinite(saved.count)&&Number.isFinite(saved.at)){energy=Math.max(0,Math.min(9999,Math.floor(saved.count)));energyAt=Math.min(Date.now(),saved.at)}}catch(_){}
+let energyTickets=0;try{energyTickets=Math.max(0,Math.min(100,Number(localStorage.getItem('linepop_v28_energytickets'))||0))}catch(_){}
+function saveEnergyTickets(){try{localStorage.setItem('linepop_v28_energytickets',String(energyTickets))}catch(_){}}
+function refreshItemWallet(){const e=$('energyTickets'),t=$('timeTickets'),c=$('chainTickets');if(e)e.textContent=energyTickets+'/100';if(t)t.textContent=stock+'/100';if(c)c.textContent=chainStock+'/100';const b=$('useEnergyTicket');if(b)b.disabled=energyTickets<1}
+const PACKS=[{key:'normal',name:'일반',qty:5,emoji:'📦'},{key:'ruby',name:'루비',qty:10,emoji:'❤️'},{key:'emerald',name:'에메랄드',qty:20,emoji:'💚'},{key:'diamond',name:'다이아몬드',qty:50,emoji:'💎'},{key:'gold',name:'황금 수정',qty:100,emoji:'👑'}];
+let packBag={};try{packBag=JSON.parse(localStorage.getItem('linepop_v29_packs')||'{}')||{}}catch(_){}
+function savePackBag(){try{localStorage.setItem('linepop_v29_packs',JSON.stringify(packBag))}catch(_){}}
+function renderPacks(){const host=$('packList');if(!host)return;host.innerHTML='';for(const pack of PACKS){const count=Math.max(0,Math.min(99,Number(packBag[pack.key])||0));const cell=document.createElement('div');cell.style.cssText='border-radius:10px;padding:7px;background:#324266;font-size:12px';cell.innerHTML=`<b>${pack.emoji} ${pack.name} +${pack.qty}</b><div>보유 ${count}세트</div>`;const open=document.createElement('button');open.textContent='개봉';open.style.cssText='margin:4px 2px;padding:6px 10px';open.disabled=count<=0;open.onclick=()=>{if(!packBag[pack.key])return;packBag[pack.key]--;energy+=pack.qty;energyAt=Date.now();savePackBag();saveEnergy();energyUI();renderPacks();notify(`${pack.name} 세트 개봉! 에너지 +${pack.qty}`)};cell.append(open);const test=document.createElement('button');test.textContent='테스트 지급';test.style.cssText='margin:4px 2px;padding:6px 7px;background:#b7c5e0';test.disabled=count>=99;test.onclick=()=>{packBag[pack.key]=Math.min(99,count+1);savePackBag();renderPacks();notify('테스트용 세트 지급')};cell.append(test);host.append(cell)}}
+function saveEnergy(){try{localStorage.setItem(ENERGY_KEY,JSON.stringify({count:energy,at:energyAt}))}catch(_){}}
+function refreshEnergy(){const now=Date.now();if(energy>=ENERGY_MAX){energyAt=now;saveEnergy();return}const elapsed=Math.max(0,now-energyAt);const earned=Math.floor(elapsed/ENERGY_INTERVAL);if(earned>0){energy=Math.min(ENERGY_MAX,energy+earned);energyAt=energy===ENERGY_MAX?now:energyAt+earned*ENERGY_INTERVAL;saveEnergy()}}
+function energyUI(){refreshEnergy();refreshItemWallet();$('energyCount').textContent=energy+'개 (자동 충전 기준 10개)';if(energy>=10){$('energyETA').textContent='자동 충전 대기 · 10개 미만이 되면 재개'}else{const left=ENERGY_INTERVAL-(Date.now()-energyAt);$('energyETA').textContent='다음 +1: '+Math.max(0,Math.ceil(left/60000))+'분'}}
+function spendEnergy(){refreshEnergy();if(energy<=0){energyUI();show('⚡ 에너지 부족','에너지가 부족합니다. 20분마다 1개가 자동 충전되거나 에너지 세트를 개봉해 충전하세요.','확인','energy');return false}if(energy>=ENERGY_MAX)energyAt=Date.now();energy--;saveEnergy();energyUI();return true}
+let stock=0,adUsed=false,shopOpen=false,pausedAt=0,adRunning=false,adCountdown=null;try{stock=Math.max(0,Math.min(100,+(localStorage.getItem('linepop_v9_stock')||0))||0)}catch(_){}
+let chainStock=1;try{const saved=localStorage.getItem('linepop_v25_chainstock');if(saved!==null)chainStock=Math.max(0,Math.min(100,Number(saved)||0))}catch(_){}
+const persistChain=()=>{try{localStorage.setItem('linepop_v25_chainstock',String(chainStock))}catch(_){}};
+const persistStock=()=>{try{localStorage.setItem('linepop_v9_stock',String(stock))}catch(_){}};
+let records={};try{records=JSON.parse(localStorage.getItem('linepop_v9_records')||'{}')}catch(_){}
+function saveRecord(stars){const key=String(level),old=records[key]||{stars:0,score:0,time:0};records[key]={stars:Math.max(old.stars,stars),score:Math.max(old.score,score-levelStart),time:Math.max(old.time,remaining)};try{localStorage.setItem('linepop_v9_records',JSON.stringify(records))}catch(_){}}
+function awardStars(){const ratio=(score-levelStart)/target;return remaining>=16&&ratio>=1.25?3:remaining>=8?2:1}
+const wrap=(n,size)=>(n%size+size)%size;
+function place(el,r,c){el.style.transform=`translate3d(${c*100}%,${r*100}%,0)`}
+function tile(obj,r,c){const el=document.createElement('div');el.className='tile'+(obj.chain?' locked':'')+(obj.ice?' iced':'');el.dataset.r=r;el.dataset.c=c;el.dataset.id=obj.id;const sp=obj.special;let icon=sp==='bomb'?'💣':sp==='row'?'━':sp==='col'?'┃':sp==='color'?'✦':'';el.innerHTML=`<div class="gem g${obj.v}">${obj.ice?`<span class="iceCrust">❄<small>${obj.ice}</small></span>`:''}${sp?`<span class="power ${sp}">${icon}</span>`:''}</div>`;place(el,r,c);return el}
+function render(){hideHint();boardEl.querySelectorAll('.tile,.particle,.chainBridge').forEach(el=>el.remove());const frag=document.createDocumentFragment();for(let r=0;r<R;r++)for(let c=0;c<C;c++)if(board[r][c])frag.append(tile(board[r][c],r,c));boardEl.prepend(frag);drawChains()}
+function drawChains(){boardEl.querySelectorAll('.chainBridge').forEach(el=>el.remove());const done=new Set();for(let r=0;r<R;r++)for(let c=0;c<C;c++){const t=board[r][c];if(!t?.chain||done.has(t.id))continue;const partner=t.chain.partner;let rr=-1,cc=-1;for(let y=0;y<R;y++)for(let x=0;x<C;x++)if(board[y][x]?.id===partner){rr=y;cc=x}if(rr<0)continue;done.add(t.id);done.add(partner);const el=document.createElement('div');el.className='chainBridge '+t.chain.axis;el.style.left=((c+cc+1)/2/C*100)+'%';el.style.top=((r+rr+1)/2/R*100)+'%';el.textContent='⛓';boardEl.append(el)}}
+function update(){remaining=Math.max(0,remaining);if(battleMode!=='solo'){const secondsLeft=Math.max(0,(battleEnds-Date.now())/1000);$('matchClock').textContent='경기 종료까지 '+secondsLeft.toFixed(1)+'초';$('opponentSeconds').textContent=opponentRemaining.toFixed(1)+'초';$('opponentGauge').style.width=Math.max(0,opponentRemaining/20*100)+'%';}$('level').textContent=level;$('score').textContent=score;$('timer').textContent=remaining.toFixed(1)+'s';$('timeBar').style.width=(remaining/20*100)+'%';$('timeBar').classList.toggle('low',remaining<=5);$('timerBox').classList.toggle('urgent',remaining<=5);$('target').textContent=battleMode==='solo'?`이번 단계 ${Math.max(0,score-levelStart)} / ${target}점 · ${colors}색 · 체인 ${countChains()}개 · 최고 ⭐${records[level]?.stars||0}`:`⚔️ 90초 생존전 · 특수 블록/연쇄 보너스 허용 · 연장권 금지`;$('fill').style.width=Math.min(100,(score-levelStart)/target*100)+'%'}
+function countChains(){let k=0;for(const row of board)for(const t of row)if(t?.chain)k++;return Math.floor(k/2)}
+function findMatches(b=board){const hit=new Set();for(let r=0;r<R;r++){let s=0;for(let c=1;c<=C;c++){if(c<C&&b[r][c]&&b[r][s]&&b[r][c].v===b[r][s].v)continue;if(c-s>=3&&b[r][s])for(let k=s;k<c;k++)hit.add(r*C+k);s=c}}for(let c=0;c<C;c++){let s=0;for(let r=1;r<=R;r++){if(r<R&&b[r][c]&&b[s][c]&&b[r][c].v===b[s][c].v)continue;if(r-s>=3&&b[s][c])for(let k=s;k<r;k++)hit.add(k*C+c);s=r}}return hit}
+function matchGroups(b=board){const groups=[];for(let r=0;r<R;r++){let st=0;for(let c=1;c<=C;c++){if(c<C&&b[r][c]&&b[r][st]&&b[r][c].v===b[r][st].v)continue;if(c-st>=3&&b[r][st])groups.push({axis:'row',cells:Array.from({length:c-st},(_,i)=>r*C+st+i)});st=c}}for(let c=0;c<C;c++){let st=0;for(let r=1;r<=R;r++){if(r<R&&b[r][c]&&b[st][c]&&b[r][c].v===b[st][c].v)continue;if(r-st>=3&&b[st][c])groups.push({axis:'col',cells:Array.from({length:r-st},(_,i)=>(st+i)*C+c)});st=r}}return groups}
+function expandSpecials(hit){const queue=[...hit],triggered=new Set();while(queue.length){const i=queue.pop(),r=Math.floor(i/C),c=i%C,t=board[r]?.[c];if(!t?.special||triggered.has(t.id))continue;triggered.add(t.id);const add=[];if(t.special==='row')for(let x=0;x<C;x++)add.push(r*C+x);if(t.special==='col')for(let y=0;y<R;y++)add.push(y*C+c);if(t.special==='color')for(let y=0;y<R;y++)for(let x=0;x<C;x++)if(board[y][x]?.v===t.v)add.push(y*C+x);if(t.special==='bomb')for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if(r+dy>=0&&r+dy<R&&c+dx>=0&&c+dx<C)add.push((r+dy)*C+c+dx);for(const j of add)if(!hit.has(j)){hit.add(j);queue.push(j)}}return triggered.size}
+function rotatedCopy(b,index,axis,amount){const next=b.map(row=>row.slice()),d=wrap(amount,axis==='x'?C:R);if(axis==='x'){for(let c=0;c<C;c++)next[index][(c+d)%C]=b[index][c]}else{for(let r=0;r<R;r++)next[(r+d)%R][index]=b[r][index]}return next}
+function canMove(b,index,axis){/* A linked pair is anchored: neither its row nor column may be rotated. */return axis==='x'?!b[index].some(t=>t?.chain):!b.some(row=>row[index]?.chain)}
+let hintVisible=false,hintSince=0,hintMove=null;
+function hideHint(){hintVisible=false;hintMove=null;boardEl.querySelectorAll('.hintGoal,.hintArrow,.hintGhost').forEach(el=>el.remove());boardEl.querySelectorAll('.tile.hintRow,.tile.hintSource,.tile.hintMatchTarget').forEach(el=>el.classList.remove('hintRow','hintSource','hintMatchTarget'))}
+function showHint(){if(!active||busy||pointer||hintVisible)return;
+ const choices=validMoves();if(!choices.length)return;
+ // Rank by resulting matched block count, power-up opportunity and shortest gesture.
+ const scored=choices.map(m=>{const span=m.axis==='x'?C:R,shift=m.shift<=span/2?m.shift:m.shift-span;
+ const next=rotatedCopy(board,m.index,m.axis,shift),hits=findMatches(next);
+ const matched=[...hits],cross=matched.some(i=>{const r=Math.floor(i/C),c=i%C;return matched.filter(k=>Math.floor(k/C)===r).length>=3&&matched.filter(k=>k%C===c).length>=3});
+ let longest=0;for(let r=0;r<R;r++){let count=0,last=-1;for(let c=0;c<C;c++){let v=next[r][c]?.v;if(v===last)count++;else count=1;last=v;longest=Math.max(longest,count)}}
+ for(let c=0;c<C;c++){let count=0,last=-1;for(let r=0;r<R;r++){let v=next[r][c]?.v;if(v===last)count++;else count=1;last=v;longest=Math.max(longest,count)}}
+ const specials=matched.filter(i=>next[Math.floor(i/C)][i%C]?.special).length;
+ const score=hits.size*100+(cross?350:0)+(longest>=5?270:longest>=4?130:0)+specials*220-Math.abs(shift)*12;
+ return {...m,shift,matched,score};});
+ scored.sort((a,b)=>b.score-a.score||Math.abs(a.shift)-Math.abs(b.shift));const best=scored[0];
+ const moved=best.matched.filter(i=>best.axis==='x'?Math.floor(i/C)===best.index:i%C===best.index);
+ const target=moved[0]??best.matched[0],r=Math.floor(target/C),c=target%C;
+ const originR=best.axis==='x'?r:wrap(r-best.shift,R),originC=best.axis==='x'?wrap(c-best.shift,C):c;
+ const source=boardEl.querySelector(`.tile[data-r="${originR}"][data-c="${originC}"]`);if(!source)return;
+ source.classList.add('hintSource');
+ const arrow=document.createElement('div');arrow.className='hintArrow';arrow.textContent=best.axis==='x'?(best.shift>0?'➜':'⬅'):(best.shift>0?'⬇':'⬆');
+ arrow.style.left=((originC+.5)/C*100)+'%';arrow.style.top=((originR+.5)/R*100)+'%';boardEl.append(arrow);
+ for(const idx of best.matched){const rr=Math.floor(idx/C),cc=idx%C;
+ if(best.axis==='x'?rr===best.index:cc===best.index){const ghost=document.createElement('div');ghost.className='hintGhost';ghost.style.left=(cc/C*100)+'%';ghost.style.top=(rr/R*100)+'%';ghost.style.width=(100/C)+'%';ghost.style.height=(100/R)+'%';boardEl.append(ghost)}
+ else{const stationary=boardEl.querySelector(`.tile[data-r="${rr}"][data-c="${cc}"]`);if(stationary)stationary.classList.add('hintMatchTarget')}
+ }
+ const goal=document.createElement('div');goal.className='hintGoal';goal.style.left=(c/C*100)+'%';goal.style.top=(r/R*100)+'%';goal.style.width=(100/C)+'%';goal.style.height=(100/R)+'%';boardEl.append(goal);
+ hintVisible=true;hintMove=best;hintSince=Date.now();
+}
+function validMoves(b=board){const moves=[];for(const axis of ['x','y'])for(let i=0;i<(axis==='x'?R:C);i++)if(canMove(b,i,axis))for(let shift=1;shift<(axis==='x'?C:R);shift++)if(findMatches(rotatedCopy(b,i,axis,shift)).size)moves.push({axis,index:i,shift});return moves}
+function clearChains(b){const byId=new Map();for(let r=0;r<R;r++)for(let c=0;c<C;c++)if(b[r][c])byId.set(b[r][c].id,{obj:b[r][c],r,c});for(const entry of byId.values()){const a=entry.obj;if(!a.chain)continue;const paired=byId.get(a.chain.partner);if(!paired||!paired.obj.chain||paired.obj.chain.partner!==a.id|| (a.chain.axis==='v'?Math.abs(entry.r-paired.r)!==1||entry.c!==paired.c:Math.abs(entry.c-paired.c)!==1||entry.r!==paired.r))a.chain=null}}
+function chainUp(){if(level<16)return;const count=Math.min(14,Math.max(1,Math.floor((Math.min(level,40)-1)/3)-(level>40?Math.floor((level-40)/5):0))),spots=[];for(let r=0;r<R;r++)for(let c=0;c<C;c++)for(const axis of ['v','h']){const rr=r+(axis==='v'?1:0),cc=c+(axis==='h'?1:0);if(rr<R&&cc<C)spots.push({r,c,rr,cc,axis})}for(let i=spots.length-1;i>0;i--){const j=rand(i+1);[spots[i],spots[j]]=[spots[j],spots[i]]}let k=0;for(const {r,c,rr,cc,axis} of spots){if(k>=count)break;const a=board[r][c],b=board[rr][cc];if(a.chain||b.chain)continue;a.chain={axis,partner:b.id};b.chain={axis,partner:a.id};k++}}
+function buildBoard(){for(let attempt=0;attempt<150;attempt++){board=Array.from({length:R},()=>Array(C).fill(null));for(let r=0;r<R;r++)for(let c=0;c<C;c++){const blocked=new Set();if(c>=2&&board[r][c-1].v===board[r][c-2].v)blocked.add(board[r][c-1].v);if(r>=2&&board[r-1][c].v===board[r-2][c].v)blocked.add(board[r-1][c].v);const choices=Array.from({length:colors},(_,i)=>i).filter(v=>!blocked.has(v));const t=gem();t.v=choices[rand(choices.length)];board[r][c]=t}if(validMoves().length)return} // very rare fallback: release chains
+for(const row of board)for(const t of row)t.chain=null}
+function setup(){
+// Keep early game welcoming, peak at eight colors in the late 30s,
+// then reward the player with fewer colors and more powers after 40.
+colors=level<=5?4:level<=10?5:level<=15?6:level<=25?6:level<=35?7:level<=40?8:level<=50?6:6+((Math.floor((level-51)/10)%2));
+// Calibrated for about 25 seconds of active matching in the 45-second round;
+// later rounds are relieved through stocked power-ups.
+const base=level<=10?950+(level-1)*65:1535+(Math.min(level,40)-10)*105;
+const relief=level>40?Math.max(.58,1-(level-40)*.018):1;
+target=Math.round(base*relief/10)*10*3;
+remaining=20;adUsed=false;levelStart=score;hintVisible=false;lastMatchAt=Date.now();lastChainAt=0;buildBoard();
+if(level>=25&&level<=40){const count=level<31?3:level<36?5:7;const spots=board.flat().filter(t=>!t.special);for(let k=0;k<count&&spots.length;k++){const j=rand(spots.length);spots.splice(j,1)[0].ice=2}}
+if(level>40){const total=Math.min(8,2+Math.floor((level-41)/6));const slots=board.flat().filter(t=>!t.chain);for(let k=0;k<total&&slots.length;k++){const i=rand(slots.length);const t=slots.splice(i,1)[0];t.special=k%3===0?'color':k%3===1?'bomb':rand(2)?'row':'col'}}
+render();update()}
+function floating(message,combo=false,warning=false){const f=document.createElement('div');f.className='float'+(combo?' combo':'')+(warning?' warning':'');f.textContent=message;boardEl.append(f);setTimeout(()=>f.remove(),580)}
+function particles(hit){sfx(hit.size>=6?'bomb':'pop');const sx=unitX(),sy=unitY();for(const i of hit){const r=Math.floor(i/C),c=i%C;for(let k=0;k<4;k++){const p=document.createElement('div');p.className='particle';p.style.left=(c+.5)*sx+'px';p.style.top=(r+.5)*sy+'px';p.style.background=['#fff8b1','#fff','#ff94e0','#84e9ff'][k];p.style.setProperty('--dx',(Math.random()*84-42)+'px');p.style.setProperty('--dy',(Math.random()*84-42)+'px');boardEl.append(p);setTimeout(()=>p.remove(),310)}}}
+function lineIndices(type,r,c){const out=[];if(type==='row')for(let x=0;x<C;x++)out.push(r*C+x);else if(type==='col')for(let y=0;y<R;y++)out.push(y*C+c);return out}
+function laserTiles(type,r,c){sfx('laser');const beam=document.createElement('div');beam.className='laserBeam '+(type==='row'?'h':'v');if(type==='row'){beam.style.left='0';beam.style.top=((r+.5)/R*100)+'%';beam.style.width='100%'}else{beam.style.top='0';beam.style.left=((c+.5)/C*100)+'%';beam.style.height='100%'}boardEl.append(beam);setTimeout(()=>beam.remove(),450)}
+async function animateLasers(hit){const seq=[];const seen=new Set();for(const i of hit){const r=Math.floor(i/C),c=i%C,t=board[r]?.[c];if(!t||(t.special!=='row'&&t.special!=='col'))continue;const key=t.special+':'+r+':'+c;if(seen.has(key))continue;seen.add(key);seq.push({type:t.special,r,c,cells:lineIndices(t.special,r,c).filter(j=>hit.has(j))})}if(!seq.length)return;for(const item of seq){laserTiles(item.type,item.r,item.c);const ordered=item.type==='row'?item.cells.sort((a,b)=>a-b):item.cells.sort((a,b)=>a-b);for(let n=0;n<ordered.length;n++){const j=ordered[n],rr=Math.floor(j/C),cc=j%C;const el=boardEl.querySelector(`.tile[data-r="${rr}"][data-c="${cc}"]`);if(el&&!el.classList.contains('burst'))el.classList.add('burst');particles([j]);await sleep(25)}await sleep(35)}}
+async function reshuffle(e){if(!active||e!==epoch)return;floating('🔀 이동 불가! 재배열');await sleep(160);if(!active||e!==epoch)return;buildBoard();render();update()}
+async function resolve(e,initialMove=null){let combo=0;while(active&&e===epoch){const groups=matchGroups();if(!groups.length)break;combo++;
+const raw=new Set(groups.flatMap(g=>g.cells));const pivot=combo===1&&initialMove?initialMove.pivot:-1;
+// Every cascade can create a power-up, including matches caused by falling pieces.
+const crosses=[];for(const h of groups.filter(g=>g.axis==='row'))for(const v of groups.filter(g=>g.axis==='col'))for(const i of h.cells)if(v.cells.includes(i))crosses.push(i);
+const five=groups.filter(g=>g.cells.length>=5).sort((a,b)=>b.cells.length-a.cells.length);
+const fours=groups.filter(g=>g.cells.length>=4).sort((a,b)=>b.cells.length-a.cells.length);
+let selected=null;if(five.length){const g=five[0];selected={index:g.cells.includes(pivot)?pivot:g.cells[Math.floor(g.cells.length/2)],special:'color'}}else if(crosses.length){selected={index:crosses.includes(pivot)?pivot:crosses[0],special:'bomb'}}else if(fours.length){const g=fours[0];selected={index:g.cells.includes(pivot)?pivot:g.cells[Math.floor(g.cells.length/2)],special:g.axis==='row'?'row':'col'}};
+// A power-up never overwrites an already existing power-up.
+// Battle matches also create board power-ups; purchased boosters remain disabled.
+if(selected&&board[Math.floor(selected.index/C)][selected.index%C]?.special){const choice=[...raw].find(i=>!board[Math.floor(i/C)][i%C]?.special);if(choice===undefined)selected=null;else selected.index=choice}
+const hit=new Set(raw);if(selected)hit.delete(selected.index);
+// When two power-ups participate in the same match they fuse into a giant blast.
+const powers=[...hit].filter(i=>board[Math.floor(i/C)][i%C]?.special);
+let fusionBonus=0;
+if(powers.length>=2){
+ const types=powers.map(i=>board[Math.floor(i/C)][i%C].special);
+ if(types.includes('color')){const palette=new Set(powers.map(i=>board[Math.floor(i/C)][i%C].v));for(let r=0;r<R;r++)for(let c=0;c<C;c++)if(palette.has(board[r][c].v))hit.add(r*C+c);fusionBonus=450;flashBoard('🌈 슈퍼 컬러 폭발!')}
+ else {const center=powers[0],r=Math.floor(center/C),c=center%C;for(let j=0;j<C;j++)hit.add(r*C+j);for(let j=0;j<R;j++)hit.add(j*C+c);if(types.includes('bomb'))for(let dr=-2;dr<=2;dr++)for(let dc=-2;dc<=2;dc++)if(r+dr>=0&&r+dr<R&&c+dc>=0&&c+dc<C)hit.add((r+dr)*C+c+dc);fusionBonus=300;flashBoard('⚡ 아이템 합체! 십자 폭발!')}
+}
+const activated=expandSpecials(hit);
+// A created tile is safe from an item blast in the same resolution step.
+if(selected)hit.delete(selected.index);
+await animateLasers(hit);
+const multiplier=combo>=5?3:combo>=3?2:1;
+const gain=(hit.size*14+activated*95+fusionBonus)*multiplier;score+=gain;
+const factor=level<=10?1:level<=20?.85:level<=30?.7:level<=40?.55:.75;const baseSeconds=Math.min(6,hit.size*.17+activated*.35);const elapsedBattle=battleMode==='solo'?0:(Date.now()-battleStarted)/1000;const battleRewardFactor=elapsedBattle>=75?.34:elapsedBattle>=60?.52:elapsedBattle>=40?.72:1;const reward=battleMode==='solo'?Math.min(7,(baseSeconds*(combo===1?1:combo===2?.7:.5)+ (combo>=5?2:0))*factor):Math.min(4.5,(Math.min(3.2,hit.size*.12+activated*.27)*(combo===1?1:combo===2?1.2:1.45))+(combo>=3?.45:0))*battleRewardFactor;addTime(reward);if(reward>0)floating('⏳ 시간 +'+reward.toFixed(1)+'초',true);lastMatchAt=Date.now();hideHint();update();
+if(activated){flashBoard('💥 특수 아이템 발동!');const fx=document.createElement('div');fx.className='blastFX';boardEl.append(fx);setTimeout(()=>fx.remove(),480)}
+floating(combo>1?`🔥 ${combo}연쇄 ×${multiplier} +${gain}점`:activated?`💥 아이템 +${gain}점`:`+${gain}점`,combo>1||activated>0);
+particles(hit);for(const i of hit){const el=boardEl.querySelector(`.tile[data-r="${Math.floor(i/C)}"][data-c="${i%C}"]`);if(el&&!el.classList.contains('burst'))el.classList.add('burst')}
+await sleep(140);if(!active||e!==epoch)return;
+const removedIds=new Set();let iceCracked=0,iceBroken=0;
+for(const i of hit){const r=Math.floor(i/C),c=i%C,t=board[r][c];if(!t)continue;
+ if(t.ice>1){t.ice--;iceCracked++;continue}
+ if(t.ice===1)iceBroken++;
+ removedIds.add(t.id);board[r][c]=null;
+}
+if(iceCracked)floating(`❄️ 얼음 ${iceCracked}개 균열!`,true);
+if(iceBroken){sfx('ice');const bonus=Math.min(4,iceBroken*1.5);score+=iceBroken*80;addTime(bonus);floating(`❄️ 얼음 파괴! +${iceBroken*80}점 · +${bonus.toFixed(1)}초`,true);update()}
+if(selected){const obj=board[Math.floor(selected.index/C)][selected.index%C];if(obj){obj.special=selected.special;floating(selected.special==='color'?'🌈 무지개 아이템 탄생!':selected.special==='bomb'?'💣 폭탄 탄생!':'✨ 한 줄 제거 탄생!',true)}}
+for(const row of board)for(const t of row)if(t?.chain&&removedIds.has(t.chain.partner))t.chain=null;
+const next=Array.from({length:R},()=>Array(C).fill(null)),drops=[];
+for(let c=0;c<C;c++){
+ // Linked tiles remain attached to the board, even while other gems fall.
+ // Gravity works separately in each segment between linked anchors.
+ let bottom=R-1;
+ while(bottom>=0){
+  if(board[bottom][c]?.chain){const t=board[bottom][c];next[bottom][c]=t;drops.push({t,from:bottom,to:bottom,c});bottom--;continue}
+  let top=bottom;while(top>=0&&!board[top][c]?.chain)top--;
+  let dest=bottom;
+  for(let r=bottom;r>top;r--)if(board[r][c]){const t=board[r][c];next[dest][c]=t;drops.push({t,from:r,to:dest,c});dest--}
+  const blanks=dest-top;
+  for(let r=dest;r>top;r--){const t=gem();next[r][c]=t;drops.push({t,from:r-blanks,to:r,c})}
+  bottom=top;
+ }
+}
+board=next;clearChains(board);boardEl.querySelectorAll('.tile,.chainBridge').forEach(t=>t.remove());const frag=document.createDocumentFragment();for(const d of drops){d.el=tile(d.t,d.from,d.c);frag.append(d.el)}boardEl.prepend(frag);await new Promise(ok=>requestAnimationFrame(()=>requestAnimationFrame(ok)));for(const d of drops){d.el.style.transition=`transform ${Math.max(115,Math.min(260,125+Math.abs(d.to-d.from)*17))}ms cubic-bezier(.18,.72,.22,1)`;d.el.dataset.r=d.to;place(d.el,d.to,d.c)}await sleep(280);if(!active||e!==epoch)return;render();if(battleMode==='solo'&&score-levelStart>=target){win();return}
+}if(active&&e===epoch&&!validMoves().length)await reshuffle(e)}
+function flashBoard(message){boardEl.classList.remove('charged');void boardEl.offsetWidth;boardEl.classList.add('charged');setTimeout(()=>boardEl.classList.remove('charged'),420);floating(message,true)}
+function chooseAxis(p,axis){p.axis=axis;p.tiles=[...boardEl.querySelectorAll('.tile')].filter(t=>axis==='x'?+t.dataset.r===p.r:+t.dataset.c===p.c);const frag=document.createDocumentFragment();for(const t of p.tiles)for(const sign of [-1,1]){const r=+t.dataset.r+(axis==='y'?sign*R:0),c=+t.dataset.c+(axis==='x'?sign*C:0),clone=t.cloneNode(true);clone.style.pointerEvents='none';p.clones.push({el:clone,r,c});frag.append(clone)}boardEl.append(frag)}
+function previewMatch(p){
+ const size=p.axis==='x'?unitX():unitY(),steps=Math.round(p.delta/size);
+ if(p.previewStep===steps)return;
+ p.previewStep=steps;
+ // Clear the preview on every visible block, not just on the dragged line.
+ boardEl.querySelectorAll('.tile.matchPreview').forEach(el=>el.classList.remove('matchPreview'));
+ if(steps===0)return;
+ const next=rotatedCopy(board,p.axis==='x'?p.r:p.c,p.axis,steps);
+ const matches=findMatches(next);
+ if(matches.size&&p.lastPreviewHit!==steps){vibrate(matches.size>=5?[22,35,28]:12);p.lastPreviewHit=steps}
+ for(const idx of matches){
+  const r=Math.floor(idx/C),c=idx%C;
+  const moved=p.axis==='x'?r===p.r:c===p.c;
+  if(moved){
+   // Find the original tile whose shifted position completes this match.
+   const sr=p.axis==='x'?r:wrap(r-steps,R);
+   const sc=p.axis==='x'?wrap(c-steps,C):c;
+   const original=p.tiles.find(el=>+el.dataset.r===sr&&+el.dataset.c===sc);
+   if(original)original.classList.add('matchPreview');
+   for(const cl of p.clones)if(+cl.el.dataset.r===sr&&+cl.el.dataset.c===sc)cl.el.classList.add('matchPreview');
+  }else{
+   // Other rows/columns are part of the same match and must sparkle too.
+   const stationary=boardEl.querySelector(`.tile[data-r="${r}"][data-c="${c}"]`);
+   if(stationary)stationary.classList.add('matchPreview');
+  }
+ }
+}
+function drawDrag(p){const sx=unitX(),sy=unitY();for(const t of p.tiles){const r=+t.dataset.r,c=+t.dataset.c;t.style.transition='none';t.style.transform=`translate3d(${c*sx+(p.axis==='x'?p.delta:0)}px,${r*sy+(p.axis==='y'?p.delta:0)}px,0)`}for(const g of p.clones){g.el.style.transform=`translate3d(${g.c*sx+(p.axis==='x'?p.delta:0)}px,${g.r*sy+(p.axis==='y'?p.delta:0)}px,0)`}}
+async function finishDrag(p,e){if(!p.axis)return;const sx=unitX(),sy=unitY(),sz=p.axis==='x'?sx:sy;
+// A brief velocity assist: capped to 0.38 cell, never allowed to bypass valid-match rules.
+const velocity=(p.lastDelta??p.delta)-(p.prevDelta??p.delta);
+const assisted=p.delta+(inertiaOn?Math.max(-sz*.38,Math.min(sz*.38,velocity*2.4)):0);
+const amount=Math.round(assisted/sz),proposed=rotatedCopy(board,p.axis==='x'?p.r:p.c,p.axis,amount),valid=amount!==0&&findMatches(proposed).size>0,goal=valid?amount*sz:0;for(const t of p.tiles){const r=+t.dataset.r,c=+t.dataset.c;t.style.transition='transform 125ms cubic-bezier(.22,.84,.22,1)';t.style.transform=`translate3d(${c*sx+(p.axis==='x'?goal:0)}px,${r*sy+(p.axis==='y'?goal:0)}px,0)`}for(const g of p.clones){g.el.style.transition='transform 125ms cubic-bezier(.22,.84,.22,1)';g.el.style.transform=`translate3d(${g.c*sx+(p.axis==='x'?goal:0)}px,${g.r*sy+(p.axis==='y'?goal:0)}px,0)`}await sleep(135);if(!active||e!==epoch)return;if(!valid){render();if(amount!==0)floating('매치 없음 · 원위치',false,true);return}board=proposed;render();await resolve(e,{pivot:p.axis==='x'?p.r*C+wrap(p.c+amount,C):wrap(p.r+amount,R)*C+p.c})}
+function show(title,msg,label,mode){phase=mode;active=false;document.body.classList.remove('emergency');$('dialogTitle').textContent=title;$('dialogText').textContent=msg;$('actionBtn').textContent=label;overlay.classList.remove('hidden');clearInterval(timer)}
+function dropRandomChain(){
+ if((battleMode==='solo'&&level<16)||!active||busy||pointer)return false;
+ const locations=[];
+ for(let r=0;r<R;r++)for(let c=0;c<C;c++)for(const axis of ['h','v']){
+  const rr=r+(axis==='v'?1:0),cc=c+(axis==='h'?1:0);
+  if(rr>=R||cc>=C)continue;
+  const a=board[r][c],b=board[rr][cc];
+  if(a?.chain||b?.chain||a?.special||b?.special)continue;
+  locations.push({r,c,rr,cc,axis});
+ }
+ for(let i=locations.length-1;i>0;i--){const j=rand(i+1);[locations[i],locations[j]]=[locations[j],locations[i]]}
+ for(const {r,c,rr,cc,axis} of locations){
+  const a=board[r][c],b=board[rr][cc];
+  a.chain={axis,partner:b.id};b.chain={axis,partner:a.id};
+  if(!validMoves().length){a.chain=null;b.chain=null;continue}
+  render();
+  const link=[...boardEl.querySelectorAll('.chainBridge')].find(el=>Math.abs(parseFloat(el.style.left)-((c+cc+1)/2/C*100))<.01&&Math.abs(parseFloat(el.style.top)-((r+rr+1)/2/R*100))<.01);
+  if(link)link.classList.add('clank');
+  sfx('chain');floating('⛓️ 철컥! 체인 등장',true);update();
+  return true;
+ }
+ return false;
+}
+function dropBattleIce(){
+ if(battleMode==='solo'||!active||busy||pointer)return false;
+ const options=[];
+ for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+  const t=board[r][c];if(t&&!t.chain&&!t.special&&!t.ice)options.push(t);
+ }
+ if(!options.length)return false;
+ const t=options[rand(options.length)];t.ice=2;
+ render();floating('❄️ 얼음 등장! 두 번 맞춰 제거',true);update();return true;
+}
+function battleObstacles(now){
+ if(battleMode==='solo'||busy||pointer)return;
+ const elapsed=(now-battleStarted)/1000;
+ // One ice block at 15s, 30s, 45s, ... ; a single chain at 20s, 40s, 60s, 80s.
+ // Advance stages only on successful placement, otherwise retry when the board is free.
+ const iceDue=Math.min(5,Math.floor(elapsed/15));
+ const chainDue=Math.min(4,Math.floor(elapsed/20));
+ if(battleIceStage<iceDue){if(dropBattleIce())battleIceStage++;else battleIceStage=iceDue;return}
+ if(battleChainStage<chainDue){if(dropRandomChain())battleChainStage++;else battleChainStage=chainDue}
+}
+function tick(){if(!active)return;
+ const now=Date.now();
+ if(!busy&&!pointer&&!hintVisible&&now-lastMatchAt>=4000)showHint();
+ if(battleMode!=='solo'){
+   battleObstacles(now);
+   if(now-opponentLast>=900){const dt=(now-opponentLast)/1000;opponentLast=now;const elapsed=(now-battleStarted)/1000;const drain=elapsed>=75?1.7:elapsed>=60?1.4:elapsed>=40?1.15:1;const boost=elapsed>=75?.34:elapsed>=60?.52:elapsed>=40?.72:1;opponentRemaining=Math.max(0,opponentRemaining-dt*drain);if(opponentRemaining>0 && battleRand()<.65){opponentRemaining=Math.min(20,opponentRemaining+(.35+battleRand()*1.5)*boost)} }
+   const elapsed=(now-battleStarted)/1000;const rate=elapsed>=75?1.7:elapsed>=60?1.4:elapsed>=40?1.15:1;
+   const step=Math.min(.25,Math.max(0,(now-(battleTickAt||now))/1000));battleTickAt=now;
+   if(rate>1)deadline-=(rate-1)*step*1000;
+   remaining=Math.max(0,(deadline-now)/1000);update();dangerUI();
+   if(remaining<=0||opponentRemaining<=0||now>=battleEnds){
+     const winner=remaining>0&&opponentRemaining<=0?'win':remaining<=0&&opponentRemaining>0?'loss':remaining>opponentRemaining?'win':remaining<opponentRemaining?'loss':'draw';finishBattle(winner);}
+   return;
+ }
+
+ // Only add chains after level 15, when matching has stalled for 4 seconds.
+ // Limit to one new chain per 4 seconds while the player remains stalled.
+ if(battleMode==='solo'&&level>=16&&!busy&&!pointer&&now-lastMatchAt>=7000&&now-lastChainAt>=4000){lastChainAt=now;dropRandomChain()}
+remaining=Math.max(0,(deadline-Date.now())/1000);update();dangerUI();if(!remaining){epoch++;pointer=null;busy=false;show('⏰ 시간 종료!',`획득 점수: ${score-levelStart} / ${target}점\n${level}단계에서 도전을 마쳤어요.`,'다시 도전','lost')}}
+function clock(){clearInterval(timer);deadline=Date.now()+remaining*1000;timer=setInterval(tick,90)}
+function addTime(seconds){if(!active||seconds<=0)return;remaining=Math.min(20,Math.max(0,(deadline-Date.now())/1000)+seconds);deadline=Date.now()+remaining*1000;update()}
+function inventory(){refreshItemWallet();if($('battleTime')){$('battleTime').textContent=battleTimeUsed?'⏱ 시간 연장 사용 완료':`⏱ +5초 (${stock}개 · 1회)`;$('battleTime').disabled=!active||battleTimeUsed||stock<1;$('battleClear').textContent=battleChainUsed?'⛓️ 체인 제거 사용 완료':`⛓️ 전체 체인 제거 (${chainStock}개 · 1회)`;$('battleClear').disabled=!active||battleChainUsed||chainStock<1||countChains()===0;} $('chainStockLabel').textContent=chainStock; $('stock').textContent=stock+'/100'; $('useBoost').disabled=stock<1||!active; $('watchAd').disabled=adUsed||adRunning||!active }
+function notify(text){const n=document.createElement('div');n.className='toast';n.textContent=text;document.body.append(n);setTimeout(()=>n.remove(),1500)}
+function pauseGame(){if(battleMode!=='solo')return;if(!active||busy||pointer)return;remaining=Math.max(0,(deadline-Date.now())/1000);active=false;phase='paused';pausedAt=Date.now();clearInterval(timer);$('pauseCurtain').classList.add('open');dangerUI();inventory()}
+function resumeGame(){if(phase!=='paused'||shopOpen)return;lastMatchAt+=Date.now()-pausedAt;lastChainAt+=Date.now()-pausedAt;active=true;phase='playing';$('pauseCurtain').classList.remove('open');clock();inventory()}
+function openShop(){if(shopOpen||adRunning)return;shopOpen=true;if(active){remaining=Math.max(0,(deadline-Date.now())/1000);pausedAt=Date.now();clearInterval(timer);active=false;phase='shop'}$('shopModal').classList.remove('hidden');inventory()}
+function closeShop(){if(!shopOpen)return;shopOpen=false;$('shopModal').classList.add('hidden');if(phase==='shop'){lastMatchAt+=Date.now()-pausedAt;lastChainAt+=Date.now()-pausedAt;active=true;phase='playing';clock()}inventory()}
+
+function win(){recordRank(score-levelStart);sfx('win');const stars=awardStars();saveRecord(stars);show('🎉 단계 성공! ' + '⭐'.repeat(stars),`${level}단계 통과!\n이번 점수 ${score-levelStart}점 · 남은 시간 ${remaining}초\n최고 기록 ${records[level].score}점 / 최고 별 ${records[level].stars}개`,'다음 단계','won')}
+function start(freeLevelContinue=false){if(!(freeLevelContinue&&battleMode==='solo'&&phase==='won')&&!spendEnergy())return;battleTimeUsed=false;battleChainUsed=false;soundReady();epoch++;pointer=null;busy=false;setup();active=true;phase='playing';overlay.classList.add('hidden');$('pauseCurtain').classList.remove('open');$('battleResult').classList.remove('on');if(battleMode!=='solo'){colors=5;remaining=20;buildBoard();render();update();battleStarted=Date.now();battleTickAt=battleStarted;battleEnds=battleStarted+90000;opponentRemaining=20;opponentLast=battleStarted;opponentRoll=0;battleRng=0x12345678;battleChainStage=0;battleIceStage=0;}clock();inventory();startMusic();dangerUI()}
+function finishBattle(result){if(phase==='battleResult')return;if(result==='win')recordBattleVictory();else{battleStreak=0;try{localStorage.setItem('linepop_v26_streak','0')}catch(_){}}sfx(result==='win'?'win':'lose');remaining=Math.max(0,(deadline-Date.now())/1000);active=false;phase='battleResult';epoch++;clearInterval(timer);$('battleResultTitle').textContent=result==='win'?'🏆 승리!':result==='loss'?'💔 패배!':'🤝 무승부';$('battleResultText').textContent=`남은 시간: 나 ${remaining.toFixed(1)}초 / 상대 ${opponentRemaining.toFixed(1)}초\n경과 시간 ${((Date.now()-battleStarted)/1000).toFixed(1)}초 · 연습용 가상 상대와 경기했습니다.`;$('battleResult').classList.add('on')}
+function chooseMode(mode){battleMode=mode;for(const [m,id] of [['solo','soloMode'],['friend','friendMode'],['random','randomMode']])$(id).classList.toggle('chosen',m===mode);const b=mode!=='solo';$('battleHUD').classList.toggle('on',b);$('booster').style.display=b?'none':'';$('battleItems').classList.toggle('on',b);$('pauseBtn').style.display=b?'none':'';$('modeText').textContent=b?'온라인 매칭은 아직 미연결입니다. 현재 가상 상대와 90초 생존전을 연습합니다. 현금 내기·결제 없음.':'일반 게임: 첫 시작에만 ⚡1개, 게임 오버까지 다음 레벨 무료 · 목표 점수 3배';show(b?'⚔️ '+(mode==='friend'?'친구 초대':'랜덤 대전')+' 연습':'💎 일반 게임',b?'20초로 시작! 특수 블록과 연쇄로 시간을 충전하세요. 경기 15초부터 얼음, 20초부터 체인이 등장합니다. 얼음 완전 파괴 시 +1.5초! 후반부에는 시간 회복량이 줄고 게이지가 더 빨리 감소합니다. 경기 중 +5초와 전체 체인 제거는 보유 아이템이 있으면 각각 1회 가능. 한쪽 시간이 0이 되거나 90초가 지나면 종료됩니다.\n현재는 가상 상대 연습이며 온라인 상대 연결은 되지 않습니다.':'에너지 1개로 게임 오버까지 레벨을 연속 진행합니다. 단계별 목표 점수는 기존의 3배입니다.',b?'대전 연습 시작':'게임 시작','intro')}
+$('soloMode').onclick=()=>chooseMode('solo');$('friendMode').onclick=()=>chooseMode('friend');$('randomMode').onclick=()=>chooseMode('random');$('rematchBtn').onclick=()=>start();$('leaveBattleBtn').onclick=()=>{battleMode='solo';$('battleResult').classList.remove('on');chooseMode('solo')};
+
+function restart(){score=0;level=1;start()}
+$('actionBtn').onclick=()=>{if(phase==='energy'){show('💎 라인팝','에너지가 충전되면 다시 시작할 수 있어요.','시작하기','intro');return}if(phase==='won'){level++;start(true)}else restart()};$('restartBtn').onclick=()=>show('새 게임 시작?','처음부터 1단계로 다시 시작합니다.','새 게임 시작','restart');$('pauseBtn').onclick=pauseGame;
+$('resumeBtn').onclick=resumeGame;
+$('pauseMenu').onclick=()=>{ $('pauseCurtain').classList.remove('open');show('새 게임 시작?','1레벨부터 다시 시작합니다.','새 게임 시작','restart')};
+$('useEnergyTicket').onclick=()=>{refreshEnergy();if(energyTickets<=0)return;energyTickets--;energy++;if(energy>=ENERGY_MAX)energyAt=Date.now();saveEnergyTickets();saveEnergy();energyUI();notify('⚡ 에너지 +1 충전 완료')};
+$('useBoost').onclick=()=>{if(battleMode!=='solo'||!active||busy||stock<1)return;stock--;persistStock();addTime(5);floating('⏱ +5초 충전!',true);inventory()};
+$('testChain').onclick=()=>{if(battleMode!=='solo'||active){notify('일반 모드 대기 화면에서만 테스트 지급 가능');return}chainStock=Math.min(100,chainStock+1);persistChain();inventory();notify('테스트용 체인 제거권 +1 (실제 구매 아님)')};
+$('battleTime').onclick=()=>{if(battleMode==='solo'||!active||battleTimeUsed||stock<1)return;stock--;persistStock();battleTimeUsed=true;addTime(5);sfx('win');floating('⏱ +5초! 대전 1회 사용',true);inventory()};
+$('battleClear').onclick=()=>{if(battleMode==='solo'||!active||battleChainUsed||chainStock<1||countChains()===0||busy||pointer)return;chainStock--;persistChain();battleChainUsed=true;hideHint();const links=[...boardEl.querySelectorAll('.chainBridge')];for(const link of links){const fx=document.createElement('div');fx.className='chainShatter';fx.textContent='💥';fx.style.left=link.style.left;fx.style.top=link.style.top;boardEl.append(fx);setTimeout(()=>fx.remove(),750)}for(const row of board)for(const t of row)if(t)t.chain=null;sfx('chain');floating('⛓️ 모든 체인 해제!',true);setTimeout(()=>{if(active)render()},600);inventory()};
+$('shopBtn').onclick=()=>{if(battleMode==='solo')openShop()};$('shopClose').onclick=closeShop;
+$('shopAction').onclick=()=>{if(stock>=100){notify('시간 연장권은 최대 100개까지 보관 가능');return}stock++;persistStock();notify('테스트 구매: 연장권 +1 (결제 없음)');inventory()};
+$('watchAd').onclick=()=>{if(battleMode!=='solo'||!active||busy||adUsed||adRunning)return;adRunning=true;remaining=Math.max(0,(deadline-Date.now())/1000);active=false;phase='ad';pausedAt=Date.now();clearInterval(timer);$('shopTitle').textContent='📺 광고 보상 데모';$('shopText').textContent='실제 광고가 연결되어 있지 않아요. 5초 후 테스트 보상이 지급됩니다.';$('shopAction').classList.add('hidden');$('shopClose').classList.add('hidden');shopOpen=true;$('shopModal').classList.remove('hidden');let count=5;adCountdown=setInterval(()=>{count--; $('shopText').textContent='광고 시청 데모: '+count+'초 남음';if(count<=0){clearInterval(adCountdown);adRunning=false;adUsed=true;stock=Math.min(100,stock+1);persistStock();shopOpen=false;$('shopModal').classList.add('hidden');$('shopAction').classList.remove('hidden');$('shopClose').classList.remove('hidden');$('shopTitle').textContent='⏱ 시간 충전소';$('shopText').textContent='시간 연장권은 사용할 때 5초가 추가됩니다.';lastMatchAt+=Date.now()-pausedAt;lastChainAt+=Date.now()-pausedAt;active=true;phase='playing';clock();notify('광고 데모 보상: +5초 연장권 1개');inventory()}},1000)};
+
+boardEl.addEventListener('pointerdown',e=>{if(!active||busy)return;hideHint();const t=e.target.closest('.tile');if(!t)return;pointer={id:e.pointerId,x:e.clientX,y:e.clientY,lastDelta:0,prevDelta:0,r:+t.dataset.r,c:+t.dataset.c,axis:null,delta:0,tiles:[],clones:[]};boardEl.setPointerCapture(e.pointerId)});
+boardEl.addEventListener('pointermove',e=>{const p=pointer;if(!p||p.id!==e.pointerId||!active)return;const dx=e.clientX-p.x,dy=e.clientY-p.y;if(!p.axis){if(Math.max(Math.abs(dx),Math.abs(dy))<6)return;const axis=Math.abs(dx)>=Math.abs(dy)?'x':'y';if(!canMove(board,axis==='x'?p.r:p.c,axis)){floating('⛓️ 체인 고정! 이 줄은 이동 불가',false,true);pointer=null;return}chooseAxis(p,axis)}p.prevDelta=p.lastDelta;p.delta=Math.max(-(p.axis==='x'?C*unitX():R*unitY()),Math.min((p.axis==='x'?C*unitX():R*unitY()),p.axis==='x'?dx:dy));p.lastDelta=p.delta;drawDrag(p);previewMatch(p)});
+boardEl.addEventListener('pointerup',async e=>{const p=pointer;if(!p||p.id!==e.pointerId)return;pointer=null;if(!active||busy||!p.axis)return;busy=true;const e0=epoch;try{await finishDrag(p,e0)}finally{busy=false}});
+
+// Invitation sharing is functional on a hosted HTTPS URL. Actual installation
+// attribution, fraud prevention and referral rewards require server verification.
+const INVITE_KEY='linepop_v27_invite_code';
+let myInviteCode='';
+try{myInviteCode=localStorage.getItem(INVITE_KEY)||''}catch(_){}
+if(!/^[A-Z0-9]{8}$/.test(myInviteCode)){
+ const arr=new Uint8Array(8);if(window.crypto?.getRandomValues)crypto.getRandomValues(arr);else for(let i=0;i<8;i++)arr[i]=Math.floor(Math.random()*256);
+ const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';myInviteCode=Array.from(arr,v=>chars[v%chars.length]).join('');
+ try{localStorage.setItem(INVITE_KEY,myInviteCode)}catch(_){}
+}
+$('inviteCode').textContent='내 초대 코드: '+myInviteCode;
+const incoming=new URLSearchParams(location.search).get('ref');
+if(incoming&&/^[A-Z0-9]{8}$/.test(incoming)&&incoming!==myInviteCode){
+ $('inviteStatus').textContent='🎉 초대 코드 '+incoming+' 확인! 게임 체험 가능 · 추천 보상(양쪽 에너지 충전권 10장 + 시간 연장권 5장)은 서버가 첫 설치를 검증한 후 지급됩니다.';
+}else if(location.protocol==='file:'){
+ $('inviteStatus').textContent='현재 로컬 HTML 파일입니다. 다른 휴대폰에서 초대 링크를 열려면 HTTPS로 게임을 게시해야 합니다.';
+}
+function inviteUrl(){
+ if(!/^https?:$/.test(location.protocol))return '';
+ const url=new URL(location.href);url.searchParams.set('ref',myInviteCode);url.hash='';return url.toString();
+}
+function inviteMessage(){const url=inviteUrl();return '🎮 라인팝 7×10 같이 해보자! 내 친구 초대 코드: '+myInviteCode+(url?'\n'+url:'\n(게임이 웹에 게시되면 초대 링크가 생성돼요)')}
+$('shareInvite').onclick=async()=>{
+ const url=inviteUrl();if(!url){$('inviteStatus').textContent='실제 초대 링크는 HTTPS로 게임을 게시한 후 사용할 수 있어요. 지금은 코드를 복사해 친구에게 전달할 수 있습니다.';return}
+ if(navigator.share){try{await navigator.share({title:'라인팝 친구 초대',text:'라인팝 같이 즐기자! 추천 코드: '+myInviteCode,url});$('inviteStatus').textContent='공유 화면을 열었어요. 실제 설치 보상은 아직 연동되지 않았어요.'}catch(e){if(e.name!=='AbortError')$('inviteStatus').textContent='공유하지 못했어요. 링크 복사를 이용해 주세요.'}}
+ else {try{await navigator.clipboard.writeText(inviteMessage());$('inviteStatus').textContent='초대 메시지 복사 완료! 카카오톡·페이스북 등에 붙여 넣으세요.'}catch(e){$('inviteStatus').textContent='공유 기능을 사용할 수 없어요. 초대 코드를 직접 알려주세요: '+myInviteCode}}
+};
+$('copyInvite').onclick=async()=>{try{await navigator.clipboard.writeText(inviteMessage());$('inviteStatus').textContent='초대 링크 또는 코드를 복사했어요.'}catch(e){$('inviteStatus').textContent='복사가 지원되지 않아요. 화면의 코드 '+myInviteCode+'를 직접 전달해 주세요.'}};
+
+boardEl.addEventListener('pointercancel',()=>{pointer=null;hideHint();render()});setup();inventory();energyUI();renderPacks();setInterval(energyUI,15000);})();
+</script></body></html>
